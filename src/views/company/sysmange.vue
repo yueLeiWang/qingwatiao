@@ -5,12 +5,20 @@
 			<template>
 					<el-tabs v-model="activeName" @tab-click="handleClick">
 						<el-tab-pane label="我的资料" name="first">
-							<div style="height:160px;margin-bottom:20px;margin-top:20px;">
-								<div style="width:120px;height:120px;margin:0 auto;background:#eee;border-radius:50%;"></div>
-                                <p style="margin-top:10px;">上传头像</p>
+							<div class="sysmange-personalHeaderPic">
+								<el-upload
+								class="avatar-uploader"
+								action="https://jsonplaceholder.typicode.com/posts/"
+								:show-file-list="false"
+								:on-success="handleAvatarSuccess"
+								:before-upload="beforeAvatarUpload">
+								<img v-if="imageUrl" :src="imageUrl" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+								</el-upload>									
+                                <p class="marginTop10">上传头像</p>
 							</div>
-							<div style="height:300px;margin-bottom:50px;">
-								<div style="width:400px;margin:0 auto;text-align:left;">
+							<div class="sysmange-personalInfWrap">
+								<div class="sysmange-personalFrom">
 								<el-form label-position="left" label-width="80px" :model="formLabelAlign" >
 										<el-form-item label="联系方式:">
 											<el-input v-model="formLabelAlign.name" placeholder="请输入联系方式" style="width:300px;"></el-input>
@@ -22,7 +30,7 @@
 											<el-input v-model="formLabelAlign.type" placeholder="请输入邮箱" style="width:300px;"></el-input>
 										</el-form-item>
 										<el-form-item>
-											<div style="text-align:center;padding-right:20px;padding-bottom:20px;">
+											<div class="sysmange-personalFromB">
 												<button  type="button" class="selfbutton_cancel1" >取消</button>
 												<button  type="button" class="selfbutton_ok1"  >确认</button>												
 											</div>
@@ -34,16 +42,34 @@
 							</div>
 						</el-tab-pane>
 						<el-tab-pane label="公司资料" name="second">
-							<div style="height:160px;margin-bottom:20px;margin-top:20px;">
-								<div style="width:120px;height:120px;margin:0 auto;background:#eee;;cursor:pointer"></div>
-                                <p style="margin-top:10px;color:#5cd9eb;cursor:pointer">上传公司logo</p>
+							<div class="sysmange-personalHeaderPic">
+								<el-upload
+								class="logo-uploader"
+								action="https://jsonplaceholder.typicode.com/posts/"
+								:show-file-list="false"							
+								:on-success="handleAvatarSuccess1"								
+								:before-upload="beforeAvatarUpload1">
+								<img v-if="imageUrl1" :src="imageUrl1" class="companylogo">
+								<i v-else class="el-icon-plus companylogo-icon"></i>
+								</el-upload>
+                                <p class="sysmange-companyLogoText">上传公司logo</p>
 							</div>
 							<div style="margin-bottom:50px;">
-								<div style="width:400px;margin:0 auto;text-align:left;">
+								<div class="sysmange-companyFormWrap">
 								<el-form label-position="left" label-width="80px" :model="companyform" >
 										<el-form-item label="公司名称:" prop="companyName">
 											<el-input v-model="companyform.companyName" placeholder="请输入公司名称" style="width:300px;"></el-input>
-											<div style="position:absolute;margin-left:320px;margin-top:-40px;width:100px;color:#5cd9eb;cursor:pointer">上传营业执照</div>
+											<el-upload
+											class="upload-demo"
+											ref="upload"
+											:show-file-list="false"
+											:auto-upload="false"
+											:on-progress="handlePictureCardPreview"											
+											action="https://jsonplaceholder.typicode.com/posts/"
+											>
+											<div style="width:100px;color:#5cd9eb;cursor:pointer">上传营业执照</div>
+											</el-upload>
+											
 										</el-form-item>
 										<el-form-item label="人员规模:" prop="personnelScale">
 												<el-select v-model="companyform.personnelScale" placeholder="请选择" style="width:300px;" popper-class="searchrecom_select">
@@ -99,9 +125,9 @@
 												</el-input>
 										</el-form-item>																													
 										<el-form-item>
-											<div style="text-align:center;padding-right:20px;padding-bottom:20px;">
+											<div class="sysmange-personalFromB">
 												<button  type="button" class="selfbutton_cancel1" >取消</button>
-												<button  type="button" class="selfbutton_ok1"  >确认</button>												
+												<button  type="button" class="selfbutton_ok1" @click="submitUpload" >确认</button>												
 											</div>
 										</el-form-item>											
 								</el-form>									
@@ -383,13 +409,62 @@
 						value:'13',
 						label: '长沙'
 					}
-			],																			
+			],
+			imageUrl: '',
+			imageUrl1: '',
+			companyLogo:'',
+			companyLicense:''																			
 		}
 	 },
 	 methods: {
+		handlePictureCardPreview(event, file, fileList) {
+			
+			console.log(fileList)
+			this.companyLicense=fileList[0].name
+		},		 
 		handleClick(tab, event) {
 			console.log(tab);
-		}
+		},
+		handleAvatarSuccess(res, file) {
+			this.imageUrl = URL.createObjectURL(file.raw);
+		},
+		beforeAvatarUpload(file) {
+			const isLt2M = file.size / 1024 / 1024 < 2;
+			if (!isLt2M) {
+			this.$message.error('上传头像图片大小不能超过 2MB!');
+			}
+			return  isLt2M;
+		},
+		handleAvatarSuccess1(res, file) {
+			this.imageUrl1 = URL.createObjectURL(file.raw);
+			this.companyLogo=file.name
+		},
+		beforeAvatarUpload1(file) {
+			const isLt2M = file.size / 1024 / 1024 < 2;
+			if (!isLt2M) {
+			this.$message.error('上传图片大小不能超过 2MB!');
+			}
+			return  isLt2M;
+		},
+		handleAvatarSuccess2(res, file) {
+			this.companyLicense=file.name
+		},
+		beforeAvatarUpload2(file) {
+			const isLt2M = file.size / 1024 / 1024 < 2;
+			if (!isLt2M) {
+			this.$message.error('上传图片大小不能超过 2MB!');
+			}
+			return  isLt2M;
+		},		
+		submitUpload(){
+			console.log(this.companyLogo)
+			 //不自动上传时应该如何处理
+             this.$refs.upload.submit();
+			 this.$nextTick(( )=>{
+                 console.log(this.companyLicense)
+			 })
+			 
+		}				
 	 },
 	mounted(){
 		
@@ -397,6 +472,65 @@
   }
 </script>
 <style scoped>
+  .upload-demo{display:inline-block;position:absolute;}
+  .sysmange-companyFormWrap{width:400px;margin:0 auto;text-align:left;}
+  .sysmange-companyLogoText{margin-top:10px;color:#5cd9eb;}
+  .sysmange-personalHeaderPic{
+    height:160px;margin-bottom:20px;margin-top:20px;
+  }
+  .sysmange-personalInfWrap{height:300px;margin-bottom:50px;}
+  .sysmange-personalFrom{width:400px;margin:0 auto;text-align:left;}
+  .sysmange-personalFromB{text-align:center;padding-right:20px;padding-bottom:20px;}
+  .avatar-uploader .el-upload {
+	width:120px;
+	height:120px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+	line-height: 120px;
+	border: 1px dashed #d9d9d9;
+    border-radius:50%;
+    text-align: center;
+  }
+  .avatar {
+    width: 120px;
+	height: 120px;
+	border-radius:50%;
+    display: block;
+  }
+  .logo-uploader .el-upload {
+	width:120px;
+	height:120px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .logo-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .companylogo-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+	line-height: 120px;
+	border: 1px dashed #d9d9d9;
+    text-align: center;
+  }
+  .companylogo {
+    width: 120px;
+	height: 120px;
+    display: block;
+  }  
 .positionSubWrap{width:100vm;height:100vh;background:#f3f3f3;}
 .maincontentWrap{width:1200px;margin:0 auto;margin-top:10px;padding-left:20px;padding-right:20px;background:#fff;padding-top:20px;}
 </style>
