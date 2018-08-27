@@ -43,7 +43,7 @@
 											<p class="uploadHeader">点击上传头像</p>									
 								</div>
 							</div>
-							<div class="editusrerInfo" v-show="personInfObject.name == ''" style="height:90px;line-height:90px;" @click="editPersonInf('add')">编辑个人信息</div>
+							<div class="editusrerInfo" v-show="personInfObject.name == ''" style="height:90px;line-height:90px;cursor:pointer" @click="editPersonInf('add')">编辑个人信息</div>
 							<transition name="el-zoom-in-top">
 								<div v-show="personInfShow" class="jianli_personInfWrap">
 									<div class="jianli_personInfWrapSub">
@@ -63,7 +63,7 @@
 												</div>
 												<p class="uploadHeader">点击上传头像</p>
 										</div>									
-										<el-form ref="form" :model="formInline" :rules="rules" label-width="90px" label-position="top" style="margin-left:30px;margin-top:-120px;">									
+										<el-form ref="formInline" :model="formInline" :rules="rules" label-width="90px" label-position="top" style="margin-left:30px;margin-top:-120px;">									
 											<el-row>
 												<el-col :span="12">
 													<el-form-item label="姓名" prop="name">
@@ -142,7 +142,7 @@
 																size="large"
 																:options="Adressoptions"
 																v-model="formInline.selectedOptions1"
-																@change="AdressChange">
+																@change="AdressChange1">
 																</el-cascader>
 													</el-form-item>											
 												</el-col>
@@ -150,8 +150,8 @@
 											</el-row>											
 											<el-form-item>
 												<div class="jianli_actionFromButton">
-													<button  type="button" class="selfbutton_cancel" @click="personEditCan">取消</button>
-													<button  type="button" class="selfbutton_ok"  @click="personEditOk">确认修改</button>												
+													<button  type="button" class="selfbutton_cancel" @click="personEditCan('formInline')">取消</button>
+													<button  type="button" class="selfbutton_ok"  @click="personEditOk('formInline')">确认修改</button>												
 												</div>
 											</el-form-item>																																																											
 										</el-form>									
@@ -395,7 +395,9 @@
 													</el-col>
 													<el-col :span="12">
 														<el-form-item label="所属公司"  prop="company">
-															<el-select v-model="projectExperienceform.company" placeholder="请选择">
+															<el-select v-model="projectExperienceform.company" placeholder="请选择"     
+															filterable
+                                                            allow-create>
 																	<el-option
 																	v-for="item in companyList"
 																	:key="item.value"
@@ -410,14 +412,18 @@
 												<el-row>
 													<el-col :span="24">
 														<el-form-item label="项目时间" prop="projectDate">
-															<el-date-picker
+															<!-- <el-date-picker
 															class="dateselectself"
 															v-model="projectExperienceform.projectDate"
 															type="daterange"
 															range-separator="至"
 															start-placeholder="开始日期"
-															end-placeholder="结束日期">
-															</el-date-picker>									
+															end-placeholder="结束日期"
+															:picker-options="pickerOptions2"
+															>
+															</el-date-picker>
+																								 -->
+															<selfdateseclect></selfdateseclect>
 														</el-form-item>											
 													</el-col>
 												</el-row>
@@ -782,6 +788,7 @@
   import selfheader from '../../components/publicHeader'
   import selfselect from '../../components/selfselect'
   import selfselectmut from '../../components/selfselectmut'
+  import selfdateseclect from '../../components/selfDateseclect'
   import { provinceAndCityData } from 'element-china-area-data'
   import util from "@/utils/date";
   export default{
@@ -789,7 +796,8 @@
 	components:{
       selfheader,
 	  selfselect,
-	  selfselectmut
+	  selfselectmut,
+	  selfdateseclect
     },
 	 data(){
 		var checkPhone = (rule, value, callback) => {
@@ -817,9 +825,33 @@
 				}
 				}
 			}
-		};		 
+		};
+		//选择地址
+		var SELADRESS = (rule, value, callback) => {
+			if (value.length > 0) {
+				callback();
+			} else {
+				callback(new Error("选择地址"));
+			}
+		};				 
 		return {
+
+		pickerOptions2: {
+				shortcuts: [{
+					text: '至今',
+					onClick(picker) {
+					const end = new Date();
+					const start = new Date();
+					start.setTime();
+					picker.$emit('pick', [start, end]);
+					}
+				}]
+				},
+
+
+
 			dict:require("../../../static/dict.json"),
+
 			//职位类型下拉数据
 			testobj:[
 			  {
@@ -919,7 +951,7 @@
 			selfEvalution:'',
 			//省市二级地址数据对象
 			Adressoptions: provinceAndCityData,
-			selectedOptions: [],
+			// selectedOptions: [],
 			ziliao:{
 				education:'',
 				work:''
@@ -1202,7 +1234,9 @@
 				sex:[{required: true, message: '请选择性别！', trigger: 'blur'}],
 				qiuzhi:[{required: true, message: '请选择求职状态！', trigger: 'blur'}],
 				worktime:[{required: true, message: '请选择开始工作时间！', trigger: 'blur'}],
-				selectedOptions:[{required: true,type: "array", message: '请选择现居地！', trigger: 'change'}],
+				selectedOptions:[
+					{required: true, message: '请选择居住地',trigger: 'change',type:'array'}
+				],
 				selectedOptions1:[{required: true,type: "array", message: '请选择籍贯！', trigger: 'change'}],
 		    },						
 			jobIntensionShow:false,
@@ -1445,7 +1479,7 @@
 			this.ziliaoAreaFlag=true;
 		},
 		//个人信息编辑函数
-        editPersonInf(status){
+        editPersonInf(status){	
            this.personInfShow=true;
 		   if(status == 'add'){
               this.formInline={
@@ -1467,7 +1501,7 @@
 
 		},
 		//个人信息表单取消
-		personEditCan(){
+		personEditCan(formName){
 			this.personInfShow=false;
 			this.formInline={
 				name: '',
@@ -1477,34 +1511,42 @@
 				worktime:'',
 				email:'',
 				selectedOptions:[],
+				selectedOptions1:[],
 				qiuzhi:''
 			};
-			this.$refs["form"].resetFields();			 
+			this.$refs[formName].resetFields();	
+					 
 		},
 		//个人信息表单确定
-		personEditOk(){
-			this.$refs.form.validate((valid) => {
-			if (!valid) return false
-				this.personInfObject=Object.assign({}, this.formInline);
-				this.personInfObject.birday=util.formatDate.format(
-						new Date(this.personInfObject.birday),
-						"yyyy-MM"
-					);			
-				var workYear=2018-util.formatDate.format(
-						new Date(this.personInfObject.worktime),
-						"yyyy"
-					)+'年工作经验';
-				if(2018-util.formatDate.format(
-						new Date(this.personInfObject.worktime),
-						"yyyy"
-				)>1){
-					this.personInfObject.worktime=workYear;
-				}else{
-					this.personInfObject.worktime='1年工作经验'  
-				}
-				this.$refs["form"].resetFields();							
-				this.personInfShow=false;
-				this.showFlag=true;			
+		personEditOk(formName){
+			this.$refs[formName].validate((valid) => {
+			if (valid) {
+					
+					this.personInfObject=Object.assign({}, this.formInline);
+					this.personInfObject.birday=util.formatDate.format(
+							new Date(this.personInfObject.birday),
+							"yyyy-MM"
+						);			
+					var workYear=2018-util.formatDate.format(
+							new Date(this.personInfObject.worktime),
+							"yyyy"
+						)+'年工作经验';
+					if(2018-util.formatDate.format(
+							new Date(this.personInfObject.worktime),
+							"yyyy"
+					)>1){
+						this.personInfObject.worktime=workYear;
+					}else{
+						this.personInfObject.worktime='1年工作经验'  
+					}
+					this.$refs[formName].resetFields();							
+					this.personInfShow=false;
+					this.showFlag=true;					
+
+			}else{
+			   this.$refs[formName].resetFields();	
+			}
+		
             })						
 
 		},
@@ -1512,6 +1554,10 @@
 		AdressChange(val){
             console.log(val)
 		},
+		//籍贯改变
+		AdressChange1(val){
+            console.log(val)
+		},		
 		//求职表单确定
 		jobIntensionEditOk(){
 			
