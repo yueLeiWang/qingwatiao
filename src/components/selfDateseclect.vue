@@ -1,15 +1,14 @@
 <template>
   <div class="selfdateWrap">
       <div class="input_text">
-        <i class="el-icon-arrow-down" v-if="!options1isShow"  @click="options1Show" ></i>
-        <i class="el-icon-arrow-up" v-if="options1isShow" @click="options1hide"></i>        
+        <i class="el-icon-date" @click="options1Show"></i>
 				<input type="text" name="" @focus="options1Show"   v-model="result" :placeholder="selfplaceholder">
 			</div>
       <div class="calendar" v-if="options1isShow">
         <div class="header">
-          <span class="pre-btn" @click="preYear"> < </span>
+          <span class="pre-btn el-icon-d-arrow-left" @click="preYear">  </span>
           <span class="now-y-m">{{ nowYear}}{{resultB}}</span>
-          <span class="next-btn" @click="nextYear"> > </span>
+          <span class="next-btn el-icon-d-arrow-right" @click="nextYear">  </span>
         </div>
         <div class="content">
           <ul>
@@ -139,9 +138,6 @@
           this.options1isShow=true;
           this.nowda();
           this.init();          
-        },
-        options1hide(){
-          this.options1isShow=false;
         }        
       },
       mounted(){
@@ -170,13 +166,13 @@
     .calendar .header .pre-btn {
       display: block;
       float: left;
-      padding: 0 10px;
+      padding: 8px 10px;
       cursor: pointer;
     }
     .calendar .header .next-btn {
       display: block;
       float: right;
-      padding: 0 10px;
+      padding: 8px 10px;
       cursor: pointer;
     }
     .calendar .title {
@@ -215,23 +211,16 @@
       color: #fff;
     }
     .input_text>input{
-      width:120px;
-      padding:0px 20px;
+      width:100px;
+      padding:0px 30px;
       height:30px;
       border:1px solid #ddd;
     }
-    .input_text .el-icon-arrow-down{
+    .input_text .el-icon-date{
       position: relative;
-      left:160px;
+      left:30px;
       top:1px;
       color: #c0c4cc;
       cursor: pointer;
-    }
-    .input_text .el-icon-arrow-up{
-      position: relative;
-      left:160px;
-      top:1px;
-      color: #c0c4cc;
-      cursor: pointer;  
-    }    
+    }   
   </style>

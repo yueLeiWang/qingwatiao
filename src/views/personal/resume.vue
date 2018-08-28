@@ -81,20 +81,17 @@
 											<el-row>
 												<el-col :span="12">
 													<el-form-item label="生日" prop="birday">
-															<el-date-picker
-															v-model="formInline.birday"														
-															type="month"
-															placeholder="请选择日期">
-															</el-date-picker>
+                                                            <selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.birday" @startValue="Birdaydate" :selfplaceholder='birdayplaceholder' ></selfdateseclectnotoday>															
 													</el-form-item>											
 												</el-col>
 												<el-col :span="12">
 													<el-form-item label="开始工作时间" prop="worktime">
-															<el-date-picker
+															<!-- <el-date-picker
 															v-model="formInline.worktime"
 															type="month"
 															placeholder="请选择日期">
-															</el-date-picker>
+															</el-date-picker> -->
+															<selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.worktime" @startValue="worktimedate" :selfplaceholder='birdayplaceholder' ></selfdateseclectnotoday>
 													</el-form-item>											
 												</el-col>
 											</el-row>
@@ -286,19 +283,16 @@
 													</el-col>
 												</el-row>											
 												<el-row>
-													<el-col :span="24">
-														<el-form-item label="在职时间" prop="incumbencyDate">
-															<el-date-picker
-															class="dateselectself"
-															v-model="workExperienceform.incumbencyDate"
-															@change="incumbencydateChange"
-															type="daterange"
-															range-separator="至"
-															start-placeholder="开始日期"
-															end-placeholder="结束日期">
-															</el-date-picker>									
+													<el-col :span="6">
+														<el-form-item label="在职时间" prop="incumbencyStartDate">
+															<selfdateseclectnotoday :selfwidth="100" :calendarwidth="160" :result="workExperienceform.incumbencyStartDate" @startValue="workStartdate" :selfplaceholder='incumbencyplaceholder1' ></selfdateseclectnotoday>
 														</el-form-item>											
 													</el-col>
+													<el-col :span="8">
+														<el-form-item  prop="incumbencyEndDate" class="marginTop20">
+														   <div style="float:left;margin-left:6px;">至</div><selfdateseclect :result='workExperienceform.incumbencyEndDate' @endValue="workEnddate" :selfplaceholder='incumbencyplaceholder2'></selfdateseclect>
+														</el-form-item>											
+													</el-col>													
 												</el-row>
 												<el-row>
 													<el-col :span="24">
@@ -412,11 +406,11 @@
 												<el-row>
 													<el-col :span="6">
 														<el-form-item label="项目时间" prop="projectStartDate">
-															<selfdateseclectnotoday :result="projectExperienceform.projectStartDate" @startValue="projectStartdate" :selfplaceholder='selfplaceholder1' style="margin-left:-20px;"></selfdateseclectnotoday>
+															<selfdateseclectnotoday :selfwidth="100" :calendarwidth="160" :result="projectExperienceform.projectStartDate" @startValue="projectStartdate" :selfplaceholder='selfplaceholder1' ></selfdateseclectnotoday>
 														</el-form-item>											
 													</el-col>
 													<el-col :span="8">
-														<el-form-item  prop="projectStartDate" style="margin-top:20px;">
+														<el-form-item  prop="projectEndDate" class="marginTop20">
 														   <div style="float:left;margin-left:6px;">至</div><selfdateseclect :result='projectExperienceform.projectEndDate' @endValue="projectEnddate" :selfplaceholder='selfplaceholder2'></selfdateseclect>
 														</el-form-item>											
 													</el-col>													
@@ -519,7 +513,7 @@
 													</el-col>
 												</el-row>
 												<el-row>
-													<el-col :span="24">
+													<!-- <el-col :span="24">
 														<el-form-item label="在校时间" prop="schoolDate">
 															<el-date-picker
 															class="dateselectself"
@@ -530,7 +524,18 @@
 															end-placeholder="毕业时间">
 															</el-date-picker>									
 														</el-form-item>											
+													</el-col> -->
+													<el-col :span="6">
+														<el-form-item label="在校时间" prop="schoolStartDate">
+															<selfdateseclectnotoday :selfwidth="100" :result="educationalExperienceform.schoolStartDate" @startValue="schoolStartdate" :selfplaceholder='schoolDateplaceholder1' ></selfdateseclectnotoday>
+														</el-form-item>											
 													</el-col>
+													<el-col :span="8">
+														<el-form-item  prop="schoolEndDate" class="marginTop20">
+														   <div style="float:left;margin-left:6px;">至</div>
+														   <selfdateseclect :result='educationalExperienceform.schoolEndDate' @endValue="schoolEnddate" :selfplaceholder='schoolDateplaceholder2'></selfdateseclect>
+														</el-form-item>											
+													</el-col>													
 												</el-row>
 												<el-row>
 													<el-col :span="24">
@@ -831,8 +836,13 @@
 			}
 		};				 
 		return {
+			birdayplaceholder:'请选择日期',
+			incumbencyplaceholder1:'开始时间',
+			incumbencyplaceholder2:'结束时间',
             selfplaceholder1:'项目开始时间',
 			selfplaceholder2:'项目结束时间',
+            schoolDateplaceholder1:'入学时间',
+			schoolDateplaceholder2:'毕业时间',			
 			dict:require("../../../static/dict.json"),
 			//职位类型下拉数据
 			testobj:[
@@ -944,7 +954,8 @@
 				positionType:'',
 				positionName:'',
 				industry:'',
-				incumbencyDate:['2018-08-08','2018-08-30'],
+				incumbencyStartDate:'',
+				incumbencyEndDate:'',
 				workContent:'',
 				workPerformance:''
 			},
@@ -961,7 +972,8 @@
 				schoolName:'',
 				education:'',
 				major:'',
-				schoolDate:[],
+				schoolStartDate:'',
+				schoolEndDate:'',
 				associationActivity:'',
 			},
 			//
@@ -1265,6 +1277,14 @@
 		}
 	 },
 	 methods: {
+		 //生日改变
+		 Birdaydate(val){
+			 this.formInline.birday=val
+		 },
+		 //参加工作时间改变
+		 worktimedate(val){
+			 this.formInline.worktime=val
+		 },
 		 //项目开始时间改变
 		 projectStartdate(val){
 			 this.projectExperienceform.projectStartDate=val
@@ -1272,12 +1292,23 @@
 		 //项目结束时间改变
 		 projectEnddate(val){
 			 this.projectExperienceform.projectEndDate=val
-		 },		 
-		 //在职时间改变
-		 incumbencydateChange(val){			 
-			 var incubencydateStart=util.formatDate.format(new Date(val[0]),"yyyy-MM-dd")
-			 console.log(incubencydateStart)
+		 },	
+		 //在职开始时间改变
+		 workStartdate(val){
+			 this.workExperienceform.incumbencyStartDate=val
 		 },
+		 //在职结束时间改变
+		 workEnddate(val){
+			 this.workExperienceform.incumbencyEndDate=val
+		 },		 	 
+		 //入学时间改变
+		 schoolStartdate(val){
+			 this.educationalExperienceform.schoolStartDate=val
+		 },
+		 //毕业时间改变
+		 schoolEnddate(val){
+			 this.educationalExperienceform.schoolEndDate=val
+		 },		 
 		 //工作时间鼠标指向
 		 workover(name,index){
 			 this.$nextTick(()=>{
@@ -1575,6 +1606,16 @@
 		//工作经历表单取消
 		workAreaEditCan(){
 			this.resultValue='';
+			this.workExperienceform={
+				companyName:'',
+				positionType:'',
+				positionName:'',
+				industry:'',
+				incumbencyStartDate:'',
+				incumbencyEndDate:'',
+				workContent:'',
+				workPerformance:''
+			}		
 			this.workAreaFlag=false;
 		},
 		//项目经历表单确定
