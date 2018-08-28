@@ -34,10 +34,6 @@
             options1isShow:false,
             mounths: [
                 {
-                  label:'至今',
-                  value:'0'
-                },
-                {
                   label:'1月',
                   value:'1'
                 }, 
@@ -99,6 +95,7 @@
         },
         init() {
           this.resultB='';
+          
         },
         preYear() {
           this.nowYear -= 1;
@@ -111,18 +108,12 @@
           this.init();
         },
         showDate(mounth,index) {
-          this.active=index;
-          if (mounth ==='0' ) {
-            this.resultA='至今';
-            this.resultB='';
-          }else{
+          this.active=index; 
             if(mounth <= 9){
               mounth='0'+mounth
             }
             this.resultB='-'+mounth;
-            this.resultA=this.nowYear + '-' + (mounth);
-          }
-          
+            this.resultA=this.nowYear + '-' + (mounth);         
         },
         okDialog(){
           if(this.resultA ==''){
@@ -132,8 +123,8 @@
             });
           }else{
             this.options1isShow=false;
-            this.$emit('endValue',this.resultA)
-          }          
+            this.$emit('startValue',this.resultA)
+          }
         },
         options1Show(){
           this.options1isShow=true;
@@ -194,7 +185,7 @@
       overflow: hidden;
       background:#fff;
       padding-top:10px;
-      padding-bottom:10px;      
+      padding-bottom:10px;
     }
     .calendar .content ul li {
       display: block;

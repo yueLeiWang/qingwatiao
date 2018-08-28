@@ -410,22 +410,16 @@
 													</el-col>
 												</el-row>
 												<el-row>
-													<el-col :span="24">
-														<el-form-item label="项目时间" prop="projectDate">
-															<!-- <el-date-picker
-															class="dateselectself"
-															v-model="projectExperienceform.projectDate"
-															type="daterange"
-															range-separator="至"
-															start-placeholder="开始日期"
-															end-placeholder="结束日期"
-															:picker-options="pickerOptions2"
-															>
-															</el-date-picker>
-																								 -->
-															<selfdateseclect></selfdateseclect>
+													<el-col :span="6">
+														<el-form-item label="项目时间" prop="projectStartDate">
+															<selfdateseclectnotoday :result="projectExperienceform.projectStartDate" @startValue="projectStartdate" :selfplaceholder='selfplaceholder1' style="margin-left:-20px;"></selfdateseclectnotoday>
 														</el-form-item>											
 													</el-col>
+													<el-col :span="8">
+														<el-form-item  prop="projectStartDate" style="margin-top:20px;">
+														   <div style="float:left;margin-left:6px;">至</div><selfdateseclect :result='projectExperienceform.projectEndDate' @endValue="projectEnddate" :selfplaceholder='selfplaceholder2'></selfdateseclect>
+														</el-form-item>											
+													</el-col>													
 												</el-row>
 												<el-row>
 													<el-col :span="24">
@@ -789,6 +783,7 @@
   import selfselect from '../../components/selfselect'
   import selfselectmut from '../../components/selfselectmut'
   import selfdateseclect from '../../components/selfDateseclect'
+  import selfdateseclectnotoday from '../../components/selfDateseclectnotoday'
   import { provinceAndCityData } from 'element-china-area-data'
   import util from "@/utils/date";
   export default{
@@ -797,7 +792,8 @@
       selfheader,
 	  selfselect,
 	  selfselectmut,
-	  selfdateseclect
+	  selfdateseclect,
+	  selfdateseclectnotoday
     },
 	 data(){
 		var checkPhone = (rule, value, callback) => {
@@ -835,23 +831,9 @@
 			}
 		};				 
 		return {
-
-		pickerOptions2: {
-				shortcuts: [{
-					text: '至今',
-					onClick(picker) {
-					const end = new Date();
-					const start = new Date();
-					start.setTime();
-					picker.$emit('pick', [start, end]);
-					}
-				}]
-				},
-
-
-
+            selfplaceholder1:'项目开始时间',
+			selfplaceholder2:'项目结束时间',
 			dict:require("../../../static/dict.json"),
-
 			//职位类型下拉数据
 			testobj:[
 			  {
@@ -970,7 +952,8 @@
 			projectExperienceform:{
 				projectName:'',
 				company:'',
-				projectDate:[],
+				projectStartDate:'',
+				projectEndDate:'',
 				projectDescription:'',
 			},
 			//教育经历表单对象
@@ -1282,6 +1265,14 @@
 		}
 	 },
 	 methods: {
+		 //项目开始时间改变
+		 projectStartdate(val){
+			 this.projectExperienceform.projectStartDate=val
+		 },
+		 //项目结束时间改变
+		 projectEnddate(val){
+			 this.projectExperienceform.projectEndDate=val
+		 },		 
 		 //在职时间改变
 		 incumbencydateChange(val){			 
 			 var incubencydateStart=util.formatDate.format(new Date(val[0]),"yyyy-MM-dd")
@@ -1559,8 +1550,7 @@
             console.log(val)
 		},		
 		//求职表单确定
-		jobIntensionEditOk(){
-			
+		jobIntensionEditOk(){			
 			this.jobIntensionList=Object.assign({}, this.jobIntensionform);
 			this.jobIntensionList.position=this.jobIntensionformposition
 			console.log(this.jobIntensionList)
@@ -1589,11 +1579,18 @@
 		},
 		//项目经历表单确定
 		projectEditOk(){
-			this.resultValue='';
+			//this.projectExperienceform.projectStartDate='2018-09'
 			this.projectAreaFlag=false;
 		},
 		//项目经历表单取消
 		projectEditCan(){
+			this.projectExperienceform={
+				projectName:'',
+				company:'',
+				projectStartDate:'',
+				projectEndDate:'',
+				projectDescription:'',
+			}		
 			this.projectAreaFlag=false;
 		},
 		//教育经历表单确定
