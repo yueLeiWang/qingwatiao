@@ -86,7 +86,22 @@
       },
       computed: {
       },
-      props: ["selfplaceholder","result","selfwidth","calendarwidth"],
+      props: {
+          selfplaceholder: {
+            type: String,
+          },
+          result: {
+            type: String,
+          },
+          selfwidth:{
+              type: Number,
+              default: 100
+          },
+          calendarwidth:{
+              type: Number,
+              default: 160
+          }                           
+       },
       methods: {
         nowda() {
           var date= new Date()

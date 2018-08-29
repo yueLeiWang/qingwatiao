@@ -13,19 +13,20 @@ module.exports = {
     // 代理配置表，在这里可以配置特定的请求代理到对应的API接口
     // 例如将'localhost:9528/api/xxx'代理到'www.example.com/api/xxx'
     proxyTable: {
-      // '/api': {
-      //   target: 'http://xxxxxx.com', // 接口的域名
-      //   // secure: false,  // 如果是https接口，需要配置这个参数
-      //   changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-      //   pathRewrite: {
-      //     '^/api': ''
-      //   }
-      // }       
+      '/api': {
+        target: 'http://192.168.135.134:8181', // 接口的域名
+        secure: false,  // 如果是https接口，需要配置这个参数
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        pathRewrite: {
+          '^/api': ''
+        }
+      }  
+          
     },
 
     // Various Dev Server settings
     // host: '192.168.137.76', // 192.168.137.76 can be overwritten by process.env.HOST
-    host:'localhost',
+    // host:'localhost',
     port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
@@ -49,6 +50,7 @@ module.exports = {
   },
 
   build: {
+    env: require('./prod.env'),
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
@@ -61,7 +63,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

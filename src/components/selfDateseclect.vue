@@ -1,6 +1,6 @@
 <template>
   <div class="selfdateWrap">
-      <div class="input_text">
+      <div class="input_texts">
         <i class="el-icon-date" @click="options1Show"></i>
 				<input type="text" name="" @focus="options1Show"   v-model="result" :placeholder="selfplaceholder">
 			</div>
@@ -90,7 +90,14 @@
       },
       computed: {
       },
-      props: ["selfplaceholder","result"],
+       props: {
+          selfplaceholder: {
+            type: String,
+          },
+          result: {
+            type: String,
+          }                 
+       },
       methods: {
         nowda() {
           var date= new Date()
@@ -118,7 +125,7 @@
             if(mounth <= 9){
               mounth='0'+mounth
             }
-            this.resultB='-'+mounth;
+            this.resultB='-'+mounth;           
             this.resultA=this.nowYear + '-' + (mounth);
           }
           
@@ -210,13 +217,13 @@
       background:#da6718;
       color: #fff;
     }
-    .input_text>input{
+    .input_texts>input{
       width:100px;
       padding:0px 30px;
       height:30px;
       border:1px solid #ddd;
     }
-    .input_text .el-icon-date{
+    .input_texts .el-icon-date{
       position: relative;
       left:30px;
       top:1px;

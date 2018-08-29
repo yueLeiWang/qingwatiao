@@ -85,12 +85,7 @@
 													</el-form-item>											
 												</el-col>
 												<el-col :span="12">
-													<el-form-item label="开始工作时间" prop="worktime">
-															<!-- <el-date-picker
-															v-model="formInline.worktime"
-															type="month"
-															placeholder="请选择日期">
-															</el-date-picker> -->
+													<el-form-item label="开始工作时间" prop="worktime">					    
 															<selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.worktime" @startValue="worktimedate" :selfplaceholder='birdayplaceholder' ></selfdateseclectnotoday>
 													</el-form-item>											
 												</el-col>
@@ -201,12 +196,31 @@
 																	:value="item.label">
 																	<span>{{ item.label }}</span>
 																	</el-option>
-																</el-select>													
+															</el-select>													
 														</el-form-item>											
 													</el-col>
 													<el-col :span="12">
 														<el-form-item label="地点" prop="JobLocation">
-															<el-input v-model="jobIntensionform.JobLocation" placeholder="请输入地点" ></el-input>
+															<div style="position:absolute;z-index:222;">
+																<el-tag
+																  style="margin-left:10px;"
+																  v-for="tag in addressListsec"
+																  :key="tag"
+																  closable
+																  :disable-transitions="false"
+																  @close="closetag(tag)"
+																>
+																{{tag}}
+																</el-tag> 
+															</div>													
+																<el-cascader
+																size="large"
+																:show-all-levels='false'
+																:options="Adressoptions"
+																placeholder=""
+																v-model="jobIntensionform.JobLocation"
+																@change="AdressChange3">
+																</el-cascader>											 
 														</el-form-item>											
 													</el-col>
 												</el-row>
@@ -784,6 +798,9 @@
   </div>
 </template>
 <script type="text/javascript">
+	import {
+	getpersonalResume//获取简历信息
+	} from "@/api/resume";
   import selfheader from '../../components/publicHeader'
   import selfselect from '../../components/selfselect'
   import selfselectmut from '../../components/selfselectmut'
@@ -836,6 +853,7 @@
 			}
 		};				 
 		return {
+			addressListsec:[],
 			birdayplaceholder:'请选择日期',
 			incumbencyplaceholder1:'开始时间',
 			incumbencyplaceholder2:'结束时间',
@@ -1265,7 +1283,7 @@
 			jobIntensionform:{
 				monthSalary:'',
 				industry:'',
-				JobLocation:''
+				JobLocation:[]
 			},
 			workExperienceList:[],
 			projectExperience:[],
@@ -1476,7 +1494,7 @@
 			this.jobIntensionform={
 				monthSalary:'',
 				industry:'',
-				JobLocation:''
+				JobLocation:[]
 			}
 			this.jobIntensionShow=true
 		},
@@ -1512,6 +1530,7 @@
 				worktime:'',
 				email:'',
 				selectedOptions:[],
+				selectedOptions1:[],
 				qiuzhi:''
 			};
 		   }else{
@@ -1545,22 +1564,22 @@
 			if (valid) {
 					
 					this.personInfObject=Object.assign({}, this.formInline);
-					this.personInfObject.birday=util.formatDate.format(
-							new Date(this.personInfObject.birday),
-							"yyyy-MM"
-						);			
-					var workYear=2018-util.formatDate.format(
-							new Date(this.personInfObject.worktime),
-							"yyyy"
-						)+'年工作经验';
-					if(2018-util.formatDate.format(
-							new Date(this.personInfObject.worktime),
-							"yyyy"
-					)>1){
-						this.personInfObject.worktime=workYear;
-					}else{
-						this.personInfObject.worktime='1年工作经验'  
-					}
+					// this.personInfObject.birday=util.formatDate.format(
+					// 		new Date(this.personInfObject.birday),
+					// 		"yyyy-MM"
+					// 	);			
+					// var workYear=2018-util.formatDate.format(
+					// 		new Date(this.personInfObject.worktime),
+					// 		"yyyy"
+					// 	)+'年工作经验';
+					// if(2018-util.formatDate.format(
+					// 		new Date(this.personInfObject.worktime),
+					// 		"yyyy"
+					// )>1){
+					// 	this.personInfObject.worktime=workYear;
+					// }else{
+					// 	this.personInfObject.worktime='1年工作经验'  
+					// }
 					this.$refs[formName].resetFields();							
 					this.personInfShow=false;
 					this.showFlag=true;					
@@ -1579,7 +1598,26 @@
 		//籍贯改变
 		AdressChange1(val){
             console.log(val)
-		},		
+		},
+		//求职地点改变
+		AdressChange3(val){
+			var _this=this
+			this.jobIntensionform.JobLocation=[];
+            this.$nextTick(()=>{				    
+					for(var i=0;i<34;i++){
+							for(var j=0;j<provinceAndCityData[i].children.length;j++){
+								if(val[1] == provinceAndCityData[i].children[j].value){
+										_this.addressListsec.push(provinceAndCityData[i].children[j].label)
+								}
+							}							   
+					}			
+			})
+			
+		},
+		//求职地点改变
+		closetag(tag){
+            this.addressListsec.remove(tag)
+		},				
 		//求职表单确定
 		jobIntensionEditOk(){			
 			this.jobIntensionList=Object.assign({}, this.jobIntensionform);
@@ -1654,11 +1692,25 @@
 			this.ziliao.education=''
 			this.testUrl=''
 
+		},
+		//获取简历信息
+		getResume(){
+			getpersonalResume().then(res => {
+				if(res.data.code == '200'){
+					console.log(res.data)
+				}else{
+					this.$message({
+						type:'error',
+						message:res.data.msg
+					})
+				}               
+            });
 		}							 	
 	 },
 	 mounted() {
 		 this.educationList=this.dict.educationList
 		 this.sexList=this.dict.sex
+		 this.getResume()
 	 }	 
   }
 </script>
