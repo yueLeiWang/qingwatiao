@@ -1819,8 +1819,8 @@
 	.jianListAction{width:300px;height:30px;text-align:left;padding-top:20px;cursor:pointer}
 	.jianListAction:hover{color:#da6718}
 	.plus{position: absolute;margin-top: 15px;margin-left:15px;}
-	.hr0{display: inline-block;float: left;width: 328px;height: 1px;border: none;margin-top: 16px;border-top: 1px dashed #ccc;} 
-	.hr1{ display:inline-block;float:left;width:278px;height:1px;border:none;border-top:1px dashed #ccc;margin-top: 16px;}
+	.hr0{display:block;float: left;width: 328px;height: 1px;border: none;margin-top: 16px;border-top: 1px dashed #ccc;} 
+	.hr1{ display:block;float:left;width:278px;height:1px;border:none;border-top:1px dashed #ccc;margin-top: 16px;}
 	.bottomAction{width:720px;margin-left: 30px;margin-top: 10px;}
 	.hrName{font-size:12px;margin-left:10px;display: inline-block;margin-top: 5px;cursor: pointer}
 	.hrName:hover{color:#da6718}
