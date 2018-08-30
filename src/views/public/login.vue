@@ -60,25 +60,33 @@
 		}
 	 },
 	 methods: {
-		//gotoIndex
-		gotoIndex(){
-			this.$router.push({path:'/actionIndex1'}) 
-		},
     //登录
 		submit_form() {
         this.$refs.form.validate((valid) => {
-					if (!valid) return false
-          var userObj={
-						username:'马先生'
-					}
-					if(this.loginrole == 'zhaopin'){
-						this.loginTitle='企业登录'
-						userObj.username="cyberbay"
-						this.$router.push({name:'companyindex',params:userObj})
-					}
-					if(this.loginrole == 'qiuzhi'  || this.loginrole == undefined){
-						this.$router.push({name:'usercenter',params:userObj})
-					}					
+        if (valid) {
+          this.loading = true;
+          this.$store
+            // .dispatch("LoginByUsername", this.form)
+            // .then(res => {
+            //   this.$router.push({ path: "/" });
+            // })
+            // .catch(() => {
+						// });
+						var userObj={
+							username:'马先生'
+						}
+						if(this.loginrole == 'zhaopin'){
+							this.loginTitle='企业登录'
+							userObj.username="cyberbay"
+							this.$router.push({name:'companyindex',params:userObj})
+						}
+						if(this.loginrole == 'qiuzhi'  || this.loginrole == undefined){
+							this.$router.push({name:'usercenter',params:userObj})
+						}						
+        } else {
+          return false;
+        }
+					
         })
 	  },
 	  gotoRegister(){
