@@ -6,10 +6,29 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>qingwatiao</title>
     <!-- 高德地图引入 --> 
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=50b4544845444e562719782d7e8817ec&amp&plugin=AMap.MouseTool,AMap.PolyEditor,AMap.CircleEditor,AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder"></script> 
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=50b4544845444e562719782d7e8817ec&amp&plugin=AMap.MouseTool,AMap.PolyEditor,AMap.CircleEditor,AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder"></script>
+    <style media="screen" type="text/css">
+      #appLoading { width: 100vm; height: 100vh;}
+      #appLoading span {
+           position: absolute;
+           display: block;
+           font-size: 50px;
+           line-height: 50px;
+           top: 50%;
+           left: 50%;
+           width: 200px;
+           height: 100px;
+           font-weight: 600;
+           -webkit-transform: translateY(-50%)  translateX(-50%);
+           transform: translateY(-50%)  translateX(-50%);
+       }
+   </style> 
   </head>
   <body>
-    <div id="app"></div>     
+    <div id="appLoading">
+        <span>Loading...</span>
+    </div>    
+    <div id="app" style="display: none"></div>     
   </body>
 
 </html>

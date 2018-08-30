@@ -112,21 +112,9 @@
         "siblings": "兄弟姐妹",
         "relative": "亲戚"
     },
-    "return_status": {
-        "refunded": "退款成功",
-        "failure": "退款失败",
-        "cancel": "已取消",
-        "refunding": "申请退款中"
-    },
-    "service_status": {
-        "wait_service": "待服务",
-        "started": "已上门",
-        "finish": "已完成",
-        "cancel": "已取消"
-    },
     "sex": {
-        "male": "男",
-        "female": "女"
+        "1": "男",
+        "0": "女"
     },
     "work_time": {
         "0": "1年以下",

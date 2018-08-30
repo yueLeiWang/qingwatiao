@@ -19,13 +19,12 @@ export default {
   },
   methods: {
       logOut() {
-		console.log("aaaaaaaa")
         this.$router.push('/');
       }
   },
   mounted() {
-     
-	 
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('appLoading').style.display = 'none';     	 
   }	
 }
 </script>

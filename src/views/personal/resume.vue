@@ -9,7 +9,7 @@
 								<div class="contentWrap">
 									<div class="floatLeft fontSize18">{{personInfObject.realName}}</div> 
 									<div class="headerImgWrap">
-										<img v-if="personInfObject.gender == 1" src="../../assets/images/minicon.png">
+										<img v-if="personInfObject.gender == 0" src="../../assets/images/minicon.png">
 										<img v-else style="margin-top:-5px;" src="../../assets/images/indexiconG.png">
 									</div>
 									<div class="personInf_edit" @click="editPersonInf('edit')">编辑</div>
