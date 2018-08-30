@@ -5,19 +5,20 @@
 			  <div class="FirstArea">					
 					<div class="FirstAreaLeft">						
 						<div class="marginTop20" ref="Area0">
-							<div class="fontSize14 textAlignLeft"  v-show="showFlag">
+							<div class="fontSize14 textAlignLeft"  v-show="personInfObject.realName != ''">
 								<div class="contentWrap">
-									<div class="floatLeft fontSize18">{{personInfObject.name}}</div> 
+									<div class="floatLeft fontSize18">{{personInfObject.realName}}</div> 
 									<div class="headerImgWrap">
-										<img src="../../assets/images/minicon.png">
+										<img v-if="personInfObject.gender == 1" src="../../assets/images/minicon.png">
+										<img v-else style="margin-top:-5px;" src="../../assets/images/indexiconG.png">
 									</div>
 									<div class="personInf_edit" @click="editPersonInf('edit')">编辑</div>
 									<div class="clearfix"></div>
 									<div class="floatLeft fontSize14 marginTop20">
 											<img src="../../assets/images/jianliicon_12.png" class="positionAbsolute">
-											<span  class="marginLeft30">{{personInfObject.birday}}</span>
+											<span  class="marginLeft30">{{personInfObject.birthday}}</span>
 											<img src="../../assets/images/jianliicon_03.png" class="positionAbsolute marginLeft20">
-											<span  class="marginLeft50">{{personInfObject.worktime}}</span>
+											<span  class="marginLeft50">{{personInfObject.workYear}}年工作经验</span>
 											<img v-show="personInfObject.education !='' && personInfObject.education != undefined" src="../../assets/images/jianliicon_06.png" class="positionAbsolute marginLeft20">
 											<span  style="width:100px;display:inline-block;" class="marginLeft50" v-show="personInfObject.education !='' && personInfObject.education != undefined">{{personInfObject.education}}</span>
 									</div>
@@ -43,7 +44,7 @@
 											<p class="uploadHeader">点击上传头像</p>									
 								</div>
 							</div>
-							<div class="editusrerInfo" v-show="personInfObject.name == ''" style="height:90px;line-height:90px;cursor:pointer" @click="editPersonInf('add')">编辑个人信息</div>
+							<div class="editusrerInfo" v-show="personInfObject.realName == ''" style="height:90px;line-height:90px;cursor:pointer" @click="editPersonInf('add')">编辑个人信息</div>
 							<transition name="el-zoom-in-top">
 								<div v-show="personInfShow" class="jianli_personInfWrap">
 									<div class="jianli_personInfWrapSub">
@@ -1264,14 +1265,7 @@
 			showFlag1:false,			
 			isActive:0,
 			//个人信息数据对象
-			personInfObject:{
-				name:'',
-				birday:"",
-				worktime:'',
-				education:'',
-				phone:'',
-				email:''
-			},
+			personInfObject:{},
 			//求职意向数据对象
 			jobIntensionList:{
 				position:'',
@@ -1404,12 +1398,13 @@
 		exportword(){
                 this.showFlag=true;
 				this.personInfObject={
-					name:'马先生',
-					birday:"1993年3月",
-					worktime:'4年工作经验',
+					realName:'马先生',
+					birthday:"1993年3月",
+					workYear:'4年工作经验',
 					education:'本科',
 					phone:'13521147713',
-					email:'13521147713@163.com' 
+					email:'13521147713@163.com',
+					gender:1  
 			   }
 			   this.jobIntensionList={
 				position:'前端工程师',
@@ -1466,12 +1461,13 @@
 			this.docFile.del(index)
 			this.showFlag=false;
 			this.personInfObject={
-				name:'',
-				birday:"",
-				worktime:'',
-				education:'',
-				phone:'',
-				email:'' 
+					realName:'',
+					birthday:"",
+					workYear:'',
+					education:'',
+					phone:'',
+					email:'',
+					gender:null  
 			}
 			this.jobIntensionList={
 				position:'',
@@ -1697,7 +1693,10 @@
 		getResume(){
 			getpersonalResume().then(res => {
 				if(res.data.code == '200'){
-					console.log(res.data)
+					if(res.data.data.userInfo != undefined){
+						this.personInfObject=res.data.data.userInfo	
+					}
+					 							
 				}else{
 					this.$message({
 						type:'error',
@@ -1813,7 +1812,7 @@
 	.uploadHeader:hover{color:#da6718}
 	.personInf_heardImg_img{width:100px;height:100px;line-height:150px;border-radius:50%;margin-left:-8px;background:#e7e7e7}
 	.personInf_heardImg_img1{width:100px;height:100px;line-height:150px;border-radius:50%;margin-left:-8px;background:#e7e7e7}
-	.headerImgWrap{width:20px;height:20px; margin-top: 5px;float:left;margin-left:10px;}
+	.headerImgWrap{width:20px;height:20px; float:left;margin-left:10px;margin-top:5px;}
 	.contentWrap{width:568px;height:130px;float:left;margin-left:30px;}
 	.tabactive{background:#da6718;}
 	.liWrap{margin-top:10px;}

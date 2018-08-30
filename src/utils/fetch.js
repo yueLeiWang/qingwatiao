@@ -1,11 +1,11 @@
 import axios from 'axios'
 import router from '../router'
-//import store from '../store'
+import store from '../store/store'
 import { Message } from 'element-ui'
 // 创建axios实例
 const instance = axios.create({
   // baseURL: '/api', // api的base_url
-  // timeout: 15000,                 // 请求超时时间
+  // timeout: 15000,  // 请求超时时间
   headers: { 'content-type': 'application/json;charset=UTF-8' }
 })
 var arr = []
