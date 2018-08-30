@@ -11,7 +11,7 @@ import axios from 'axios'
 import echarts from 'echarts'
 import 'babel-polyfill'
 // 引入vuex
-import store from './store/store'
+import store from './store'
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios

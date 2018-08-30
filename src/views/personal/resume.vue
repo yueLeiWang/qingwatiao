@@ -1695,8 +1695,7 @@
 				if(res.data.code == '200'){
 					if(res.data.data.userInfo != undefined){
 						this.personInfObject=res.data.data.userInfo	
-					}
-					 							
+					}				 							
 				}else{
 					this.$message({
 						type:'error',

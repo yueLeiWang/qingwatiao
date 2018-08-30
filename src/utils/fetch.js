@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '../router'
-import store from '../store/store'
+import store from '../store'
 import { Message } from 'element-ui'
 // 创建axios实例
 const instance = axios.create({
