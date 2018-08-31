@@ -12,7 +12,6 @@ import echarts from 'echarts'
 import 'babel-polyfill'
 // 引入vuex
 import store from './store'
-
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
 // 按下标删除数组的对应元素

@@ -2,13 +2,16 @@ import axios from 'axios'
 import router from '../router'
 import store from '../store'
 import { Message } from 'element-ui'
+
 // 创建axios实例
 const instance = axios.create({
+   //userToken: "" + getToken,
   // baseURL: '/api', // api的base_url
   // timeout: 15000,  // 请求超时时间
   headers: { 'content-type': 'application/json;charset=UTF-8' }
 })
 var arr = []
+
 // 拦截响应
 instance.interceptors.response.use(res => {
   // if (res.data.code !== undefined) {

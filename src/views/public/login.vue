@@ -65,7 +65,7 @@
         this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store
+             //this.$store
             // .dispatch("LoginByUsername", this.form)
             // .then(res => {
             //   this.$router.push({ path: "/" });

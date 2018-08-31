@@ -5,11 +5,11 @@
 			  <div class="FirstArea">					
 					<div class="FirstAreaLeft">						
 						<div class="marginTop20" ref="Area0">
-							<div class="fontSize14 textAlignLeft"  v-show="personInfObject.realName != ''">
+							<div class="fontSize14 textAlignLeft"  v-show="personInfObjectFlag">
 								<div class="contentWrap">
 									<div class="floatLeft fontSize18">{{personInfObject.realName}}</div> 
 									<div class="headerImgWrap">
-										<img v-if="personInfObject.gender == 0" src="../../assets/images/minicon.png">
+										<img v-if="personInfObject.gender == 1" src="../../assets/images/minicon.png">
 										<img v-else style="margin-top:-5px;" src="../../assets/images/indexiconG.png">
 									</div>
 									<div class="personInf_edit" @click="editPersonInf('edit')">编辑</div>
@@ -44,7 +44,7 @@
 											<p class="uploadHeader">点击上传头像</p>									
 								</div>
 							</div>
-							<div class="editusrerInfo" v-show="personInfObject.realName == ''" style="height:90px;line-height:90px;cursor:pointer" @click="editPersonInf('add')">编辑个人信息</div>
+							<div class="editusrerInfo" v-show="!personInfObjectFlag" style="height:90px;line-height:90px;cursor:pointer" @click="editPersonInf('add')">编辑个人信息</div>
 							<transition name="el-zoom-in-top">
 								<div v-show="personInfShow" class="jianli_personInfWrap">
 									<div class="jianli_personInfWrapSub">
@@ -64,30 +64,30 @@
 												</div>
 												<p class="uploadHeader">点击上传头像</p>
 										</div>									
-										<el-form ref="formInline" :model="formInline" :rules="rules" label-width="90px" label-position="top" style="margin-left:30px;margin-top:-120px;">									
+										<el-form ref="formInline" :model="formInline" :rules="rules1" label-width="90px" label-position="top" style="margin-left:30px;margin-top:-120px;">									
 											<el-row>
 												<el-col :span="12">
-													<el-form-item label="姓名" prop="name">
-														<el-input v-model="formInline.name" placeholder="请输入您的姓名" style=""></el-input>
+													<el-form-item label="姓名" prop="realName">
+														<el-input v-model="formInline.realName" placeholder="请输入您的姓名" style=""></el-input>
 													</el-form-item>											
 												</el-col>
 												<el-col :span="12">
-													<el-form-item label="性别" prop="sex">
-															<el-radio-group v-model="formInline.sex" style="width:172px;">
-																<el-radio-button v-for="(value,key,index) in sexList" :label="value" :key="index"></el-radio-button>
+													<el-form-item label="性别" prop="gender">
+															<el-radio-group v-model="formInline.gender" style="width:172px;">
+																<el-radio-button v-for="sex in sexList" :label="sex.value" :key="sex.label">{{sex.label}}</el-radio-button>
 															</el-radio-group>
 													</el-form-item>											
 												</el-col>
 											</el-row>
 											<el-row>
 												<el-col :span="12">
-													<el-form-item label="生日" prop="birday">
-                                                            <selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.birday" @startValue="Birdaydate" :selfplaceholder='birdayplaceholder' ></selfdateseclectnotoday>															
+													<el-form-item label="生日" prop="birthday">
+                                                            <selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.birthday" @startValue="birthdaydate" :selfplaceholder='birthdayplaceholder' ></selfdateseclectnotoday>															
 													</el-form-item>											
 												</el-col>
 												<el-col :span="12">
-													<el-form-item label="开始工作时间" prop="worktime">					    
-															<selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.worktime" @startValue="worktimedate" :selfplaceholder='birdayplaceholder' ></selfdateseclectnotoday>
+													<el-form-item label="开始工作时间" prop="workStartDate">					    
+															<selfdateseclectnotoday :selfwidth="250"  :calendarwidth="310" :result="formInline.workStartDate" @startValue="workYeardate" :selfplaceholder='birthdayplaceholder' ></selfdateseclectnotoday>
 													</el-form-item>											
 												</el-col>
 											</el-row>
@@ -528,18 +528,6 @@
 													</el-col>
 												</el-row>
 												<el-row>
-													<!-- <el-col :span="24">
-														<el-form-item label="在校时间" prop="schoolDate">
-															<el-date-picker
-															class="dateselectself"
-															v-model="educationalExperienceform.schoolDate"
-															type="daterange"
-															range-separator="至"
-															start-placeholder="入学时间"
-															end-placeholder="毕业时间">
-															</el-date-picker>									
-														</el-form-item>											
-													</el-col> -->
 													<el-col :span="6">
 														<el-form-item label="在校时间" prop="schoolStartDate">
 															<selfdateseclectnotoday :selfwidth="100" :result="educationalExperienceform.schoolStartDate" @startValue="schoolStartdate" :selfplaceholder='schoolDateplaceholder1' ></selfdateseclectnotoday>
@@ -854,8 +842,9 @@
 			}
 		};				 
 		return {
+			sexTest:1,
 			addressListsec:[],
-			birdayplaceholder:'请选择日期',
+			birthdayplaceholder:'请选择日期',
 			incumbencyplaceholder1:'开始时间',
 			incumbencyplaceholder2:'结束时间',
             selfplaceholder1:'项目开始时间',
@@ -1226,28 +1215,36 @@
 			label: '面议'
 			}
 			],
-			sexList:[],
+			sexList:[
+				 {
+					value: 0,
+					label: '女'
+					}, {
+					value: 1,
+					label: '男'
+			     }
+			],
 			personInfShow:false,
 			//个人信息表单对象
 			formInline: {
-				name: '',
-				sex: '',
-				birday:'',
+				realName: '',
+				gender: '',
+				birthday:'',
 				phone:'',
-				worktime:'',
+				workStartDate:'',
 				email:'',
 				selectedOptions:[],
 				selectedOptions1:[],
 				qiuzhi:''
 			},
-			rules: {
+			rules1: {
 				name: [{required: true, message: '请输入姓名！', trigger: 'blur'}],
-				birday: [{required: true, message: '请选择生日！', trigger: 'blur'}],
+				birthday: [{required: true, message: '请选择生日！', trigger: 'blur'}],
 				phone: [{required: true, validator: checkPhone, trigger: 'blur'}],
 				email: [{required: true, validator: checkEmail, trigger: 'blur'}],
 				sex:[{required: true, message: '请选择性别！', trigger: 'blur'}],
 				qiuzhi:[{required: true, message: '请选择求职状态！', trigger: 'blur'}],
-				worktime:[{required: true, message: '请选择开始工作时间！', trigger: 'blur'}],
+				workYear:[{required: true, message: '请选择开始工作时间！', trigger: 'blur'}],
 				selectedOptions:[
 					{required: true, message: '请选择居住地',trigger: 'change',type:'array'}
 				],
@@ -1266,6 +1263,7 @@
 			isActive:0,
 			//个人信息数据对象
 			personInfObject:{},
+			personInfObjectFlag:false,
 			//求职意向数据对象
 			jobIntensionList:{
 				position:'',
@@ -1290,12 +1288,12 @@
 	 },
 	 methods: {
 		 //生日改变
-		 Birdaydate(val){
-			 this.formInline.birday=val
+		 birthdaydate(val){
+			 this.formInline.birthday=val
 		 },
 		 //参加工作时间改变
-		 worktimedate(val){
-			 this.formInline.worktime=val
+		 workYeardate(val){
+			 this.formInline.workStartDate=val
 		 },
 		 //项目开始时间改变
 		 projectStartdate(val){
@@ -1519,18 +1517,18 @@
            this.personInfShow=true;
 		   if(status == 'add'){
               this.formInline={
-				name: '',
-				sex: '',
-				birday:'',
+				realName: '',
+				gender: '',
+				birthday:'',
 				phone:'',
-				worktime:'',
+				workStartDate:'',
 				email:'',
 				selectedOptions:[],
 				selectedOptions1:[],
 				qiuzhi:''
 			};
 		   }else{
-              this.formInline=Object.assign({}, this.personInfObject);
+			  this.formInline=Object.assign({}, this.personInfObject);
 		   }
 		},
 		//头像上传函数
@@ -1541,11 +1539,11 @@
 		personEditCan(formName){
 			this.personInfShow=false;
 			this.formInline={
-				name: '',
-				sex: '',
-				birday:'',
+				realName: '',
+				gender: '',
+				birthday:'',
 				phone:'',
-				worktime:'',
+				workStartDate:'',
 				email:'',
 				selectedOptions:[],
 				selectedOptions1:[],
@@ -1560,21 +1558,21 @@
 			if (valid) {
 					
 					this.personInfObject=Object.assign({}, this.formInline);
-					// this.personInfObject.birday=util.formatDate.format(
-					// 		new Date(this.personInfObject.birday),
+					// this.personInfObject.birthday=util.formatDate.format(
+					// 		new Date(this.personInfObject.birthday),
 					// 		"yyyy-MM"
 					// 	);			
 					// var workYear=2018-util.formatDate.format(
-					// 		new Date(this.personInfObject.worktime),
+					// 		new Date(this.personInfObject.workYear),
 					// 		"yyyy"
 					// 	)+'年工作经验';
 					// if(2018-util.formatDate.format(
-					// 		new Date(this.personInfObject.worktime),
+					// 		new Date(this.personInfObject.workYear),
 					// 		"yyyy"
 					// )>1){
-					// 	this.personInfObject.worktime=workYear;
+					// 	this.personInfObject.workYear=workYear;
 					// }else{
-					// 	this.personInfObject.worktime='1年工作经验'  
+					// 	this.personInfObject.workYear='1年工作经验'  
 					// }
 					this.$refs[formName].resetFields();							
 					this.personInfShow=false;
@@ -1694,9 +1692,12 @@
 			getpersonalResume().then(res => {
 				if(res.data.code == '200'){
 					if(res.data.data.userInfo != undefined){
-						this.personInfObject=res.data.data.userInfo	
+						this.personInfObject=res.data.data.userInfo	;
+						console.log(this.personInfObject)
+						this.personInfObjectFlag=true;
 					}				 							
 				}else{
+					this.personInfObjectFlag=false;
 					this.$message({
 						type:'error',
 						message:res.data.msg
@@ -1707,7 +1708,6 @@
 	 },
 	 mounted() {
 		 this.educationList=this.dict.educationList
-		 this.sexList=this.dict.sex
 		 this.getResume()
 	 }	 
   }

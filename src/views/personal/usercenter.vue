@@ -591,6 +591,8 @@
 		this.username=this.$route.params.username
 		var arrdata=[20, 75, 70, 78, 82, 74]
 		this.drawLine(arrdata);	
+				 
+		 		 sessionStorage.setItem('TokenKey', "aaaaaaaa")
 	}
   }
 </script>
