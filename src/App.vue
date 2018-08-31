@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { getToken} from '@/utils/auth'
 export default {
 	name: 'App',
   data () {
@@ -18,11 +19,11 @@ export default {
 	  }
   },
   methods: {
-      logOut() {
-        this.$router.push('/');
-      }
   },
   mounted() {
+        if(getToken()){
+            this.$router.push({name:'usercenter'})
+        }
         document.getElementById('app').style.display = 'block';
         document.getElementById('appLoading').style.display = 'none';     	 
   }	

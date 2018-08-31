@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { removeToken} from '@/utils/auth'
 export default {
   name: 'selfheader',
   data () {
@@ -101,6 +102,7 @@ export default {
             this.$router.push({path:'/'+name})
 		},
 		gotoindex(){
+			removeToken()
 			this.$router.push({path:'/'})
 		}		
   },

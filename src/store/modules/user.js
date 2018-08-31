@@ -20,6 +20,10 @@ const user = {
   },
 
   actions: {
+   LoginByUsername({ commit }, userInfo) {
+      setToken('jjjjjjjjjj')
+    },    
+  
     // 登录
     // LoginByUsername({ commit }, userInfo) {
     //   return new Promise((resolve, reject) => {

@@ -64,25 +64,25 @@
 		submit_form() {
         this.$refs.form.validate((valid) => {
         if (valid) {
-          this.loading = true;
-             //this.$store
-            // .dispatch("LoginByUsername", this.form)
-            // .then(res => {
-            //   this.$router.push({ path: "/" });
-            // })
-            // .catch(() => {
-						// });
-						var userObj={
-							username:'马先生'
-						}
-						if(this.loginrole == 'zhaopin'){
-							this.loginTitle='企业登录'
-							userObj.username="cyberbay"
-							this.$router.push({name:'companyindex',params:userObj})
-						}
-						if(this.loginrole == 'qiuzhi'  || this.loginrole == undefined){
-							this.$router.push({name:'usercenter',params:userObj})
-						}						
+					   //异步调登录存储本地信息
+             this.$store
+            .dispatch("LoginByUsername", this.form)
+            .then(res => {
+								var userObj={
+									username:'马先生'
+								}
+								if(this.loginrole == 'zhaopin'){
+									this.loginTitle='企业登录'
+									userObj.username="cyberbay"
+									this.$router.push({name:'companyindex',params:userObj})
+								}
+								if(this.loginrole == 'qiuzhi'  || this.loginrole == undefined){
+									this.$router.push({name:'usercenter',params:userObj})
+								}
+            })
+            .catch(() => {
+						});
+						
         } else {
           return false;
         }

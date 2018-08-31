@@ -2,13 +2,15 @@ import axios from 'axios'
 import router from '../router'
 import store from '../store'
 import { Message } from 'element-ui'
-
+import { getToken } from '@/utils/auth'
 // 创建axios实例
-const instance = axios.create({
-   //userToken: "" + getToken,
+const instance = axios.create({   
   // baseURL: '/api', // api的base_url
   // timeout: 15000,  // 请求超时时间
-  headers: { 'content-type': 'application/json;charset=UTF-8' }
+  headers: { 
+    'content-type': 'application/json;charset=UTF-8',
+     userToken:getToken(),//Token值
+   }
 })
 var arr = []
 
