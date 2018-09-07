@@ -28,7 +28,7 @@
 				</div>
 				<div class="tabItemStyle marginLeft10" style="margin-top:-10px;">
 					<div class="marginTop30">
-						<div class="companyindex_Hello">你好，{{username}}</div>
+						<div class="companyindex_Hello textOverflowStyleDot">你好，{{username}}</div>
 						<div class="companyindex_userInf">
 							<img src="../../assets/images/huiyuan_03.png" class="iconImgPub">
 							<span class="marginLeft30">{{viplevel}}</span>
@@ -427,9 +427,15 @@
   }
 </script>
 <style scoped>
-.companyindex_Hello{width:150px;font-size:14px;float:left;}
+.companyindex_Hello{
+	width: 120px;
+    text-align: left;
+    padding-left: 20px;
+    font-size: 14px;
+    float: left;
+}
 .companyindex_userInf{width:142px;font-size:14px;float:right;text-align:left;}
-.companyindex_companyInf{margin-top:20px;text-align:left;padding-left:25px;color:#a6abdb}
+.companyindex_companyInf{margin-top:20px;text-align:left;padding-left:20px;color:#a6abdb}
 .echarArea{
 	width: 293px;
     height: 320px;
