@@ -203,7 +203,6 @@
 				phone: [{ validator: checkPhone, trigger: 'blur'}],
 				email: [{ validator: checkEmail, trigger: 'blur'}]
 			},
-			
 			companyform:{
 				companyName:'',
 				personnelScale:'',
