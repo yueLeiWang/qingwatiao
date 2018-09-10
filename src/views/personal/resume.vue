@@ -1,6 +1,6 @@
 <template>
   <div>
-	  <selfheader></selfheader>
+	  <selfheader></selfheader>	  
 		<div class="jianliwrap">
 			  <div class="FirstArea">					
 					<div class="FirstAreaLeft">						
@@ -784,9 +784,11 @@
 					</div>					
 				</div>
 		</div>
+		
   </div>
 </template>
 <script type="text/javascript">
+
 	import {
 	getpersonalResume//获取简历信息
 	} from "@/api/resume";
@@ -1708,7 +1710,7 @@
 	 },
 	 mounted() {
 		 this.educationList=this.dict.educationList
-		 this.getResume()
+		// this.getResume()
 	 }	 
   }
 </script>
