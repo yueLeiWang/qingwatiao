@@ -26,7 +26,7 @@ export default {
                this.$router.push({path:this.$route.path})              
             }            
         }else{
-          this.$router.push({path:'/'})
+          //this.$router.push({path:'/'})
         }        
         document.getElementById('app').style.display = 'block';
         document.getElementById('appLoading').style.display = 'none';     	 

@@ -19,20 +19,20 @@
 							</div>
 							<div class="sysmange-personalInfWrap">
 								<div class="sysmange-personalFrom">
-								<el-form label-position="left" label-width="80px" :model="formLabelAlign" >
-										<el-form-item label="联系方式:">
-											<el-input v-model="formLabelAlign.name" placeholder="请输入联系方式" style="width:300px;"></el-input>
+								<el-form label-position="left" label-width="82px" :model="formLabelAlign" ref="formLabelAlign"  :rules="myInfrules">
+										<el-form-item label="联系方式:" prop="phone">
+											<el-input v-model="formLabelAlign.phone" placeholder="请输入联系方式" style="width:300px;"></el-input>
 										</el-form-item>
-										<el-form-item label="姓名:">
-											<el-input v-model="formLabelAlign.region" placeholder="请输入姓名" style="width:300px;"></el-input>
+										<el-form-item label="姓名:"  prop="name">
+											<el-input v-model="formLabelAlign.name" placeholder="请输入姓名" style="width:300px;"></el-input>
 										</el-form-item>
-										<el-form-item label="邮箱:">
-											<el-input v-model="formLabelAlign.type" placeholder="请输入邮箱" style="width:300px;"></el-input>
+										<el-form-item label="邮箱:" prop="email">
+											<el-input v-model="formLabelAlign.email" placeholder="请输入邮箱" style="width:300px;"></el-input>
 										</el-form-item>
 										<el-form-item>
 											<div class="sysmange-personalFromB">
 												<button  type="button" class="selfbutton_cancel1" >取消</button>
-												<button  type="button" class="selfbutton_ok1"  >确认</button>												
+												<button  type="button" class="selfbutton_ok1"  @click="myinfOk('formLabelAlign')">确认</button>												
 											</div>
 										</el-form-item>											
 								</el-form>									
@@ -105,7 +105,7 @@
 												</el-select>
 										</el-form-item>
 										<el-form-item label="工作地址:"  prop="companyAddress">
-												<el-select v-model="companyform.companyAddress" placeholder="请选择" style="width:300px;" popper-class="searchrecom_select">
+												<!-- <el-select v-model="companyform.companyAddress" placeholder="请选择" style="width:300px;" popper-class="searchrecom_select">
 														<el-option
 														v-for="item in companyAddressList"
 														:key="item.value"
@@ -113,7 +113,8 @@
 														:value="item.value">
 														<span style="float: left">{{ item.label }}</span>
 														</el-option>
-												</el-select>
+												</el-select> -->
+												<el-input v-model="companyform.companyAddress" placeholder="请输入工作地址" style="width:300px;"></el-input>												
 										</el-form-item>	
 										<el-form-item label="公司介绍:" prop="description">
 												<el-input
@@ -151,12 +152,57 @@
     publicheadercom
   },
 	 data(){
+		var checkPhone = (rule, value, callback) => {
+			if (!value) {
+				return callback(new Error("请输入电话号码"));
+			} else {
+				if (!/^1[3|4|5|6|7|8|9][0-9]\d{8}$/.test(value)) {
+				callback(new Error("电话号码不正确！请重新填写"));
+				} else {
+				callback();
+				}
+			}
+		};		 
+		var checkEmail = (rule, value, callback) => {
+			if (!value) {
+				callback(new Error("请输入邮箱"));
+			} else {
+				if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+				callback(new Error("请输入正确的邮箱"));
+				} else {
+				if (value.length >= 5 && value.length <= 50) {
+					callback();
+				} else {
+					callback(new Error("请输入5-50位邮箱地址"));
+				}
+				}
+			}
+		};
+		//姓名验证规则
+		var checkName = (rule, value, callback) => {
+			if (!value) {
+				   callback(new Error("请输入2-20位姓名"));
+			} else {
+				if (value.length >= 2 && value.length <= 20) {
+				   callback();
+				} else {
+				   callback(new Error("请输入2-20位姓名"));
+				}
+			}
+		};			 
 		return {
+			//我的信息的表单对象
 			formLabelAlign: {
-			name: '',
-			region: '',
-			type: ''
+				name: '',
+				phone: '',
+				email: ''
 			},
+			//我的信息的表单验证
+			myInfrules:{
+				name: [{ validator:checkName, trigger: 'blur'}],
+				phone: [{ validator: checkPhone, trigger: 'blur'}],
+				email: [{ validator: checkEmail, trigger: 'blur'}]
+		    },
 			companyform:{
 				companyName:'',
 				personnelScale:'',
@@ -464,6 +510,15 @@
                  console.log(this.companyLicense)
 			 })
 			 
+		},
+		myinfOk(formName){
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+
+				}else{
+
+				}
+			})
 		}				
 	 },
 	mounted(){

@@ -18,25 +18,25 @@
 						<div class="searchWrod">
 							<ul class="tabWrodWrap">
 								<li class="tijianName">行业:</li>
-								<li v-for="(item,index) in options" :key="index" @click="hangye(index,name)" :class="{'active':isActive==index}">{{item.name}}</li>
+								<li v-for="item in options" :key="item.value" @click="hangye(item.value,item.label)" :class="{'active':isActive==item.value}">{{item.label}}</li>
 							</ul>
 						</div>
 						<div class="searchWrod">										
 							<ul class="tabWrodWrap">
 								<li class="tijianName">学历:</li>
-								<li v-for="(item,index) in options1" :key="index" @click="xueli(index,name)" :class="{'active':isActive1==index}">{{item.name}}</li>
+								<li v-for="item  in options1" :key="item.value" @click="xueli(item.value,item.label)" :class="{'active':isActive1==item.value}">{{item.label}}</li>
 							</ul>	
 						</div>
 						<div class="searchWrod">
 							<span class="tijianName marginLeft9">工作地区:</span>								
 							<ul class="tabWrodWrap wordBreak">
-								<li v-for="(item,index) in options2" :key="index" @click="diqu(index,name)" :class="{'active':isActive2==index}" >{{item.name}}</li>
+								<li v-for="item in options2" :key="item.value" @click="diqu(item.value,item.label)" :class="{'active':isActive2==item.value}" >{{item.label}}</li>
 							</ul>											
 						</div>
 						<div class="searchWrod marginTop30">										
 							<ul class="tabWrodWrap">
 								<li class="tijianName">薪资待遇:</li>
-								<li v-for="(item,index) in options3" :key="index" @click="xinzi(index,name)" :class="{'active':isActive3==index}" >{{item.name}}</li>
+								<li v-for="item in options3" :key="item.value" @click="xinzi(item.value,item.label)" :class="{'active':isActive3==item.value}" >{{item.label}}</li>
 							</ul>											
 						</div>
 						<div class="searchWrod marginTop30 paddingBottom50">										
@@ -264,88 +264,123 @@
 	 data(){
 		return {
 			username:'',
-			isActive:0,
-			isActive1:0,
-			isActive2:0,
-			isActive3:0,
+			isActive:1,
+			isActive1:1,
+			isActive2:1,
+			isActive3:1,
 			searchname:'',
 			options: [{
-				name: '全部'
+				label: '全部',
+				value:'1'
 			}, {
-				name: '互联网/IT'
+				label: '互联网/IT',
+				value:'2'
 			}, {
-				name: '金融'
+				label: '金融',
+				value:'3'
 			},{
-				name: '传媒'
+				label: '传媒',
+				value:'4'
 			},{
-				name: '服务业'
+				label: '服务业',
+				value:'5'
 			},{
-				name: '教育/艺术'
+				label: '教育/艺术',
+				value:'6'
 			},{
-				name: '其他'
+				label: '其他',
+				value:'7'
 			}
 			],
 			options1: [{
-				name: '全部'
+				label: '全部',
+				value:'1'
 			}, {
-				name: '专科'
+				label: '专科',
+				value:'2'
 			}, {
-				name: '本科'
+				label: '本科',
+				value:'3'
 			},{
-				name: '硕士'
+				label: '硕士',
+				value:'4'
 			},{
-				name: '博士'
+				label: '博士',
+				value:'5'
 			}
 			],
 			options2: [{
-				name: '全部'
+				label: '全部',
+				value:'1'
 			}, {
-				name: '北京'
+				label: '北京',
+				value:'2'
 			}, {
-				name: '上海'
+				label: '上海',
+				value:'3'
 			},{
-				name: '深圳'
+				label: '深圳',
+				value:'4'
 			},{
-				name: '青岛'
+				label: '青岛',
+				value:'5'
 			},{
-				name: '济南'
+				label: '济南',
+				value:'6'
 			},{
-				name: '杭州'
+				label: '杭州',
+				value:'7'
 			},{
-				name: '广州'
+				label: '广州',
+				value:'8'
 			},{
-				name: '厦门'
+				label: '厦门',
+				value:'9'
 			},{
-				name: '成都'
+				label: '成都',
+				value:'10'
 			},{
-				name: '重庆'
+				label: '重庆',
+				value:'11'
 			},{
-				name: '云南'
+				label: '云南',
+				value:'12'
 			},{
-				name: '郑州'
+				label: '郑州',
+				value:'13'
 			},{
-				name: '武汉'
+				label: '武汉',
+				value:'14'
 			},{
-				name: '长沙'
+				label: '长沙',
+				value:'15'
 			}
 
 			],
 			options3: [{
-				name: '不限'
+				label: '不限',
+				value:'1'
 			}, {
-				name: '2k以下'
+				label: '2k以下',
+				value:'2'
 			}, {
-				name: '2k-4k'
+				label: '2k-4k',
+				value:'3'
 			},{
-				name: '4k-8k'
+				label: '4k-8k',
+				value:'4'
 			},{
-				name: '8k-10k'
+				label: '8k-10k',
+				value:'5'
 			},{
-				name: '10k-15k'
+				label: '10k-15k',
+				value:'6'
 			},{
-				name: '15k-25k'
+				label: '15k-25k',
+				value:'7'
 			},{
-				name: '25k以上'
+				label: '25k以上',
+				value:'8'
 			}
 			],
 			options4: [
@@ -457,10 +492,12 @@
 		//行业选择样式变化
 		hangye(index,name){
 			this.isActive=index;
+			console.log(index,name)
 		},
 		//学历选择样式变化
 		xueli(index,name){
 			this.isActive1=index;
+			console.log(index,name)
 		},
 		//工作地区选择样式变化
 		diqu(index,name){
